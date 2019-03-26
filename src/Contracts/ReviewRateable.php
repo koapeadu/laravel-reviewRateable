@@ -13,26 +13,26 @@ interface ReviewRateable
 
     /**
      *
-     * @return mix
+     * @return double
      */
-    public function averageRating($round= null);
+    public function averageRating($round = null);
 
     /**
      *
-     * @return mix
+     * @return int
      */
     public function countRating();
 
     /**
      *
-     * @return mix
+     * @return double
      */
     public function sumRating();
 
     /**
      * @param $max
      *
-     * @return mix
+     * @return double
      */
     public function ratingPercent($max = 5);
 

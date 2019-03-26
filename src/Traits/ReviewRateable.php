@@ -17,52 +17,60 @@ trait ReviewRateable
 
     /**
      *
-     * @return mix
+     * @return double
      */
-    public function averageRating($round= null)
+    public function averageRating($round = null)
     {
-      if ($round) {
-            return $this->ratings()
-              ->selectRaw('ROUND(AVG(rating), '.$round.') as averageReviewRateable')
-              ->pluck('averageReviewRateable');
+        $avgExpression = null;
+        if ($round) {
+            $avgExpression = 'ROUND(AVG(rating), ' . $round . ') as averageReviewRateable';
+        } else {
+            $avgExpression = 'AVG(rating) as averageReviewRateable';
         }
 
         return $this->ratings()
-            ->selectRaw('AVG(rating) as averageReviewRateable')
-            ->pluck('averageReviewRateable');
+            ->selectRaw($avgExpression)
+            ->get()
+            ->first()
+            ->averageReviewRateable;
     }
 
     /**
      *
-     * @return mix
+     * @return int
      */
-    public function countRating(){
-      return $this->ratings()
-          ->selectRaw('count(rating) as countReviewRateable')
-          ->pluck('countReviewRateable');
+    public function countRating()
+    {
+        return $this->ratings()
+            ->selectRaw('count(rating) as countReviewRateable')
+            ->get()
+            ->first()
+            ->countReviewRateable;
     }
 
     /**
      *
-     * @return mix
+     * @return double
      */
     public function sumRating()
     {
         return $this->ratings()
             ->selectRaw('SUM(rating) as sumReviewRateable')
-            ->pluck('sumReviewRateable');
+            ->get()
+            ->first()
+            ->sumReviewRateable;
     }
 
     /**
      * @param $max
      *
-     * @return mix
+     * @return double
      */
     public function ratingPercent($max = 5)
     {
         $ratings = $this->ratings();
         $quantity = $ratings->count();
-        $total = $ratings->selectRaw('SUM(rating) as total')->pluck('total');
+        $total = $ratings->selectRaw('SUM(rating) as total')->get()->first()->total;
         return ($quantity * $max) > 0 ? $total / (($quantity * $max) / 100) : 0;
     }
 
